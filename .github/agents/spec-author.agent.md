@@ -1,5 +1,5 @@
 ---
-description: Interview a refined backlog item (todo/<n>-<slug>.md) into a reviewed spec — requirements → plan → tasks — that becomes the source of truth the chain implements and is validated against. Pre-design stage of the spec-driven flow (plan-review → spec-author → solution-architect). Writes the spec artifact only; no product code, tests, or research docs. Mandates a worktree-first, PR-only delivery workflow.
+description: Interview a refined backlog item (one file per item) into a reviewed spec — requirements → plan → tasks — that becomes the source of truth the chain implements and is validated against. Pre-design stage of the spec-driven flow (plan-review → spec-author → solution-architect). Writes the spec artifact only; no product code, tests, or research docs. Mandates a worktree-first, PR-only delivery workflow.
 ---
 
 ## User Input
@@ -10,7 +10,7 @@ $ARGUMENTS
 
 Parse the input before proceeding. Extract:
 
-- **Item / work unit** — the refined item file `todo/<n>-<slug>.md` (or equivalent brief) to specify (required; ask if missing).
+- **Item / work unit** — the refined item file `items/<id>-<slug>.md` (or equivalent brief) to specify (required; ask if missing).
 - **Constraints** — any stated tech, format, or scope limits the spec must honour.
 
 You are the **spec** stage of the spec-driven SDLC flow. You consume a refined
@@ -33,7 +33,7 @@ unambiguous requirements rather than a prose brief.
 
 ## Handoff-in
 
-From `plan-review`: a refined item file `todo/<n>-<slug>.md`. On the **v2
+From `plan-review`: a refined item file `items/<id>-<slug>.md`. On the **v2
 contract** its YAML front-matter is the machine-readable plan
 (`docs/decisions/0002-planning-artefact-contract.md`): `depends_on`, `complexity` /
 `size` / `estimate`, the ADR numbers in `decisions`, and a `tasks` graph (`id`,

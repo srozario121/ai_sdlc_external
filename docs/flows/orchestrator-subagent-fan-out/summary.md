@@ -1,7 +1,6 @@
 # Orchestrator–Subagent Fan-Out — Flow Summary
 
 > Full-form flow: [orchestrator-subagent-fan-out.md](orchestrator-subagent-fan-out.md)
-> Source research: [`docs/research/orchestrator-subagent-fan-out/`](../../research/orchestrator-subagent-fan-out/orchestrator-subagent-fan-out.md)
 
 ## TL;DR
 

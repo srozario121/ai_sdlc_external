@@ -1,7 +1,6 @@
 # Autonomous End-to-End SWE Agents — Flow Summary
 
 > Full-form flow: [autonomous-end-to-end-swe-agents.md](autonomous-end-to-end-swe-agents.md)
-> Source research: [`docs/research/autonomous-end-to-end-swe-agents/`](../../research/autonomous-end-to-end-swe-agents/autonomous-end-to-end-swe-agents.md)
 
 ## TL;DR
 

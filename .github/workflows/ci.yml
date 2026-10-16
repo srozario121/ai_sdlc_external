@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   check:
-    name: Quality gates (structure + links + lint-md + check-toc)
+    name: Quality gates (agent copies + links)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

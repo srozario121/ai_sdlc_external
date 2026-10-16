@@ -1,7 +1,6 @@
 # Spec-Driven Development — Flow Summary
 
 > Full-form flow: [spec-driven-development.md](spec-driven-development.md)
-> Source research: [`docs/research/spec-driven-development/`](../../research/spec-driven-development/spec-driven-development.md)
 
 ## TL;DR
 

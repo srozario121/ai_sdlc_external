@@ -1,7 +1,6 @@
 # Plan-Review v2 — Flow Summary
 
 > Full-form flow: [planning-architectures.md](planning-architectures.md)
-> Source research: [`docs/research/planning-architectures/`](../../research/planning-architectures/planning-architectures.md)
 
 ## TL;DR
 
@@ -30,10 +29,10 @@ refine several items at once, your session relays their questions.
 - **Relay mode** — you run a dependency pre-pass, launch one relay subagent per
   ready item, answer one merged item-labelled queue, then append findings and
   regenerate the index serially. It is Claude Code only.
-- **After refining:** run `make todo-index` · `make check-todo` · `make todo-ledger`,
+- **After refining:** run regenerating the backlog index · running the backlog checker · the estimate ledger,
   then hand the item file to `spec-author`, `solution-architect` or `orchestrator`.
-- **Worked example:** item 12's blinded re-plan scanned before asking and proposed
-  an XL split. Its pre-mortem named the failure that actually sank item 12.
+- **Worked example:** a blinded re-plan scanned before asking and proposed an XL
+  split whose pre-mortem named the failure that actually sank the item.
 
 ## When to reach for it (and its limits)
 

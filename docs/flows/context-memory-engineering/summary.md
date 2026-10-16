@@ -1,7 +1,6 @@
 # Context / Memory Engineering — Flow Summary
 
 > Full-form flow: [context-memory-engineering.md](context-memory-engineering.md)
-> Source research: [`docs/research/context-memory-engineering/`](../../research/context-memory-engineering/context-memory-engineering.md)
 
 ## TL;DR
 
@@ -15,7 +14,7 @@ loading, and compaction to durable artifacts. **No new agent, no chain.**
   stage.
 - **Four conventions:** layer (don't dump), isolate per role (least-privilege
   context/tools), load just-in-time (map then read the slice), compact to disk
-  (`SPEC.md`, design note, `TODO.md`, CHANGELOG survive fresh sessions).
+  (`SPEC.md`, design note, `backlog/index.md`, CHANGELOG survive fresh sessions).
 - **Always on:** applies to every flow; more load-bearing the larger or
   longer-running the task.
 - **Guard against context rot:** over-stuffed instruction files get ignored — keep

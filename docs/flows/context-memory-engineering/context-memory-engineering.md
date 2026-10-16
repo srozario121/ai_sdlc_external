@@ -1,7 +1,6 @@
 # Context / Memory Engineering — Flow
 
 > Status: full-form (cross-cutting conventions guide) · Summary: [summary.md](summary.md)
-> Source research: [`docs/research/context-memory-engineering/`](../../research/context-memory-engineering/context-memory-engineering.md)
 
 ## What this flow runs
 
@@ -28,7 +27,7 @@ agent in the repo. Each existing agent already embeds pieces of this discipline:
 - **Just-in-time context** — agents "map structure first, then read only the
   relevant sections" (the phrasing in `solution-architect` and others) rather than
   slurping whole files; MCP/tool context is pulled on demand, not front-loaded.
-- **Compaction** — durable artifacts (`SPEC.md`, the design note, `TODO.md`'s
+- **Compaction** — durable artifacts (`SPEC.md`, the design note, `backlog/index.md`'s
   resolved decisions, the CHANGELOG) carry state *across* sessions so a compacted or
   fresh context can be rehydrated from disk, not from chat history.
 
@@ -58,15 +57,15 @@ Read each convention as a rule the *other* playbooks inherit:
 
 ## Worked example
 
-Apply the guide to **the spec-driven flow running item 3**:
+Apply the guide to the spec-driven flow on a representative item:
 
 1. **Layered files:** the `spec-author` agent file holds the spec-writing rules;
-   `CLAUDE.md`/`README` hold repo-wide conventions (make gates, doc structure).
+   `CLAUDE.md`/`README` hold repo-wide conventions (the make targets, doc structure).
    `spec-author` loads its role file + the item, not the entire repo.
-2. **JIT context:** `spec-author` maps `Makefile`/`scripts/` structure, then reads
+2. **JIT context:** `spec-author` maps `Makefile`/`the repo tooling` structure, then reads
    only the target-related sections — not every script end to end.
 3. **Compaction:** it writes `SPEC.md` to the worktree. When `solution-architect`
-   starts in a fresh context, it rehydrates from `SPEC.md` + the refined `TODO.md`
+   starts in a fresh context, it rehydrates from `SPEC.md` + the refined `backlog/index.md`
    item — no dependence on `spec-author`'s chat history.
 4. **Isolation:** `code-reviewer` later runs with no Edit/Write and sees only the
    diff + acceptance criteria, not the builder's intermediate reasoning.
@@ -89,7 +88,7 @@ this is a guide, not a chain.
 - **Least-privilege context and tools** — each agent sees and can touch only what its
   stage needs; this is a safety boundary as much as a context-efficiency one.
 - **Durable over ephemeral** — state that must survive lives in files
-  (`SPEC.md`, design note, `TODO.md`, CHANGELOG), never only in a chat transcript.
+  (`SPEC.md`, design note, `backlog/index.md`, CHANGELOG), never only in a chat transcript.
 - **Guard against context rot** — over-stuffed instruction files get ignored; keep
   each layer scoped and let JIT loading pull the rest.
 - **Worktree-first, PR-only** — the delivery discipline is itself a durable-artifact
@@ -97,6 +96,5 @@ this is a guide, not a chain.
 
 ## Source
 
-Back-link: [`docs/research/context-memory-engineering/context-memory-engineering.md`](../../research/context-memory-engineering/context-memory-engineering.md)
-([summary](../../research/context-memory-engineering/summary.md)). This guide cites
+(summary). This guide cites
 that research for evidence and rationale rather than re-deriving it.

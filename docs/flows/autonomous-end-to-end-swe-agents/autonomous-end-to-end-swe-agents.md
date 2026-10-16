@@ -1,7 +1,6 @@
 # Autonomous End-to-End SWE Agents — Flow
 
 > Status: full-form · Summary: [summary.md](summary.md)
-> Source research: [`docs/research/autonomous-end-to-end-swe-agents/`](../../research/autonomous-end-to-end-swe-agents/autonomous-end-to-end-swe-agents.md)
 
 ## What this flow runs
 
@@ -48,7 +47,8 @@ and the read-only human gate at the end (what actually *ships*).
 
 ## Worked example
 
-Take **item 3, "Make-command orchestration"**, run end-to-end autonomously:
+Take a representative item — *add a command layer that wraps the common
+repository tasks* — and run it end-to-end autonomously:
 
 1. A headless run is launched in a fresh sandboxed worktree with scoped permissions
    — it may edit repo files and run `make`, but not reach the network or touch
@@ -89,6 +89,5 @@ boundary — not a reviewer's vigilance — would have stopped it.
 
 ## Source
 
-Back-link: [`docs/research/autonomous-end-to-end-swe-agents/autonomous-end-to-end-swe-agents.md`](../../research/autonomous-end-to-end-swe-agents/autonomous-end-to-end-swe-agents.md)
-([summary](../../research/autonomous-end-to-end-swe-agents/summary.md)). This flow
+(summary). This flow
 cites that research for evidence and rationale rather than re-deriving it.

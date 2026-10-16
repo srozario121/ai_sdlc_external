@@ -1,7 +1,6 @@
 # Plan-Then-Execute — Flow
 
 > Status: full-form · Summary: [summary.md](summary.md)
-> Source research: [`docs/research/plan-then-execute/`](../../research/plan-then-execute/plan-then-execute.md)
 
 ## What this flow runs
 
@@ -34,7 +33,7 @@ plan-review → solution-architect → [ APPROVAL GATE ] → implementer ↔ tes
 ```
 
 1. `plan-review` refines the item — read-only exploration, questions, resolved
-   decisions written back to the item file `todo/<n>-<slug>.md` (see the
+   decisions written back to the item file `items/<id>-<slug>.md` (see the
    [plan-review v2 flow](../planning-architectures/planning-architectures.md)).
 2. `solution-architect` turns the refined item into a **design note** (approach,
    artifact/file plan, risks, acceptance criteria). Because it holds no Bash, this
@@ -51,7 +50,7 @@ feature of the pattern.
 
 ## Worked example
 
-Take **item 4, "Author the remaining SDLC agents"**:
+Take a representative item — *author the remaining SDLC agents*:
 
 1. `plan-review` refines it: five role-specific agents, both formats, least-privilege
    tools — resolved and written back.
@@ -62,12 +61,12 @@ Take **item 4, "Author the remaining SDLC agents"**:
    no Bash, there is no way to "accidentally" start building; execution is gated by
    construction.
 4. On approval, `implementer` authors the 10 files exactly to the plan;
-   `test-author` proves `make check` and `make agents` list all six.
+   `test-author` proves `make check` passes and the agent roster lists all six.
 5. `code-reviewer` checks the diff against the acceptance criteria; `docs-writer`
    opens the PR.
 
 The read-only design stage plus the explicit approval gate *is* plan-then-execute —
-item 4 was delivered this way already; this playbook names the pattern.
+the agent chain in this kit was delivered this way; this playbook names the pattern.
 
 ## When to use it / when not
 
@@ -92,6 +91,5 @@ item 4 was delivered this way already; this playbook names the pattern.
 
 ## Source
 
-Back-link: [`docs/research/plan-then-execute/plan-then-execute.md`](../../research/plan-then-execute/plan-then-execute.md)
-([summary](../../research/plan-then-execute/summary.md)). This flow cites that
+(summary). This flow cites that
 research for evidence and rationale rather than re-deriving it.

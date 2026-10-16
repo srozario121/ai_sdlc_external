@@ -1,7 +1,6 @@
 # Spec-Driven Development — Flow
 
 > Status: full-form · Summary: [summary.md](summary.md)
-> Source research: [`docs/research/spec-driven-development/`](../../research/spec-driven-development/spec-driven-development.md)
 
 ## What this flow runs
 
@@ -17,7 +16,7 @@ existing chain. The spec is the yardstick every later stage measures against.
 
 | Stage | Agent | Role in this flow |
 |-------|-------|-------------------|
-| Plan | `plan-review` | Refines the `TODO.md` item (the *what*). |
+| Plan | `plan-review` | Refines the `backlog/index.md` item (the *what*). |
 | **Spec** | **`spec-author`** (new) | Interviews the item into a reviewed `SPEC.md` — requirements → plan → tasks. Least-privilege: Read, Grep, Glob, Write, Edit, AskUserQuestion (no Bash). |
 | Design | `solution-architect` | Designs the *how* against the fixed requirements. |
 | Build | `implementer` ↔ `test-author` | Builds to the design; loops until gates are green, validating against the spec. |
@@ -53,8 +52,8 @@ The human gate sits at two points: spec approval (before any design) and the
 
 ## Worked example
 
-Take **item 3, "Make-command orchestration for common repo functions"**, run
-spec-first:
+Take a representative item — *add a command layer for the common repository
+functions* — and run it spec-first:
 
 1. `plan-review` refines it: scope = new `make` targets wrapping repo functions,
    all `## `-documented so `make help` lists them.
@@ -62,7 +61,7 @@ spec-first:
    - **Requirements** — R1: every new target appears in `make help`; R2: `make
      check` still exits 0; R3: no target shells out to a network call; R4 (non-goal):
      no CI provider change beyond the documented workflow.
-   - **Plan** — touch `Makefile` (targets), `scripts/` (any new helper),
+   - **Plan** — touch `Makefile` (targets), `the repo tooling` (any new helper),
      `README.md` (markers), tracing each to R1–R3.
    - **Tasks** — T1 add targets (R1), T2 wire help doc-comments (R1), T3 run gates
      (R2), each naming its requirement.
@@ -102,6 +101,5 @@ single line is written.
 
 ## Source
 
-Back-link: [`docs/research/spec-driven-development/spec-driven-development.md`](../../research/spec-driven-development/spec-driven-development.md)
-([summary](../../research/spec-driven-development/summary.md)). This flow cites that
+(summary). This flow cites that
 research for evidence and rationale rather than re-deriving it.

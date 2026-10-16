@@ -1,7 +1,6 @@
 # Orchestrator–Subagent Fan-Out — Flow
 
 > Status: full-form · Summary: [summary.md](summary.md)
-> Source research: [`docs/research/orchestrator-subagent-fan-out/`](../../research/orchestrator-subagent-fan-out/orchestrator-subagent-fan-out.md)
 
 ## What this flow runs
 
@@ -52,14 +51,13 @@ The human gate is the `code-reviewer` verdict on the synthesised change.
 
 ### After refinement: across items
 
-This flow fans out **one** item. To deliver several refined items, the
-[backlog delivery flow](../backlog-delivery/backlog-delivery.md) sequences them
-into signed-off waves first. A fanned-out item counts against that flow's cap
-as its slot budget *k*: its widest parallel phase. There,
-`delivery-orchestrator` (the main session) fans the item out itself with this
-flow's decomposition and synthesis rules, at most *k* implementers at once:
-`orchestrator` has no `Agent` tool, so it cannot dispatch as a subagent. Run
-as a main session with a slot budget *k*, `orchestrator` never has more than
+This flow fans out **one** item. To deliver several refined items, sequence
+them into signed-off waves first. A fanned-out item counts against that batch's
+cap as its slot budget *k*: its widest parallel phase. There, the main session
+fans the item out itself with this flow's decomposition and synthesis rules, at
+most *k* implementers at once: `orchestrator` has no `Agent` tool, so it cannot
+dispatch as a subagent. Run as a main session with a slot budget *k*,
+`orchestrator` never has more than
 *k* `implementer` runs live at once. It can dispatch only when a plain main
 session follows its body as a playbook (or VS Code's default agent, with
 `runSubagent`): `claude --agent orchestrator` gets exactly its tools, which
@@ -67,17 +65,18 @@ have no `Agent`.
 
 ## Worked example
 
-Take **this very item (item 5)** — it fans out cleanly:
+Take a breadth-heavy item — *add a new flow, its two platform agents, and the
+supporting tooling* — it fans out cleanly:
 
 1. `orchestrator` partitions it into disjoint slices: (A) the two new **agents**
    (`.claude` + `.github` files), (B) the six **flow playbook** dirs, (C) the
-   **tooling** edits (`check_structure.sh`, `gen_toc.sh`, `new_topic.sh`). Each
-   touches a different file set.
+   **tooling** edits (the structure checker, the index generator, the scaffolding
+   script). Each touches a different file set.
 2. It dispatches three `implementer` runs — worktree A for agents, B for playbooks,
    C for tooling — in parallel.
 3. **Synthesis:** it merges the three branches. The seam is `README.md` and the
    flow-index — files *all* slices ultimately feed. `orchestrator` reconciles those
-   centrally (running `make toc` once on the merged tree) rather than letting three
+   centrally (running one regeneration of the index tables once on the merged tree) rather than letting three
    runs each rewrite `README.md` — exactly the shared-file hazard the pattern warns
    about. It runs `make check` on the whole.
 4. `code-reviewer` reviews the combined diff; `docs-writer` opens the PR.
@@ -110,6 +109,5 @@ other — the pattern's headline failure mode.
 
 ## Source
 
-Back-link: [`docs/research/orchestrator-subagent-fan-out/orchestrator-subagent-fan-out.md`](../../research/orchestrator-subagent-fan-out/orchestrator-subagent-fan-out.md)
-([summary](../../research/orchestrator-subagent-fan-out/summary.md)). This flow
+(summary). This flow
 cites that research for evidence and rationale rather than re-deriving it.

@@ -1,7 +1,6 @@
 # Test-Driven Agent Loops — Flow Summary
 
 > Full-form flow: [test-driven-agent-loops.md](test-driven-agent-loops.md)
-> Source research: [`docs/research/test-driven-agent-loops/`](../../research/test-driven-agent-loops/test-driven-agent-loops.md)
 
 ## TL;DR
 

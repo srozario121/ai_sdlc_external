@@ -1,7 +1,6 @@
 # Test-Driven Agent Loops — Flow
 
 > Status: full-form · Summary: [summary.md](summary.md)
-> Source research: [`docs/research/test-driven-agent-loops/`](../../research/test-driven-agent-loops/test-driven-agent-loops.md)
 
 ## What this flow runs
 
@@ -48,14 +47,14 @@ transition that no stage may skip.
 
 ## Worked example
 
-Take a slice of **this very item — extending `check_structure.sh` to cover
-`docs/flows/`**:
+Take a slice of work — *extending the structure checker to cover
+`docs/flows/`*:
 
 1. `test-author` adds the check first: a case asserting that a `docs/flows/<slug>/`
    dir missing its `summary.md` makes `make check` **fail**. Run it against the
    current tree — it is **red** (the script does not yet loop over `docs/flows`).
-2. `implementer` adds `docs/flows` to the area loop in `check_structure.sh` — the
-   minimum to satisfy the check.
+2. `implementer` adds `docs/flows` to the checker's area loop — the minimum to
+   satisfy the check.
 3. `test-author` re-runs `make check`: the flows area is now validated and the case
    is **green**. A deliberately-incomplete flow dir still fails, proving the gate
    bites.
@@ -90,6 +89,5 @@ after the fix can pass vacuously.
 
 ## Source
 
-Back-link: [`docs/research/test-driven-agent-loops/test-driven-agent-loops.md`](../../research/test-driven-agent-loops/test-driven-agent-loops.md)
-([summary](../../research/test-driven-agent-loops/summary.md)). This flow cites that
+(summary). This flow cites that
 research for evidence and rationale rather than re-deriving it.

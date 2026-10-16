@@ -10,7 +10,7 @@ $ARGUMENTS
 
 Parse the input before proceeding. Extract:
 
-- **Item / design** — the refined item file `todo/<n>-<slug>.md` and/or its `solution-architect` design note to fan out (required; ask if missing).
+- **Item / design** — the refined item file `items/<id>-<slug>.md` and/or its `solution-architect` design note to fan out (required; ask if missing).
 - **Constraints** — parallelism limits, any subtasks that must stay sequential, and the shared files no two subagents may both edit.
 - **Slot budget *k*** — the most `implementer` runs you may have live at once, when your caller sets one. Without one, the parallelism limit above applies.
 
@@ -79,8 +79,7 @@ You can dispatch only when a **plain main session** follows this body as a
 playbook (in VS Code, the default agent with `runSubagent`). As a subagent you
 cannot, and neither can `claude --agent orchestrator`: that session gets
 exactly your tools, which have no `Agent` (in VS Code nested subagents are off
-by default). In the backlog delivery flow
-(`docs/flows/backlog-delivery/backlog-delivery.md`), `delivery-orchestrator`
+by default). In a batch delivery, the main session
 fans an item's parallel tasks out itself, applying your Phase 1 and Phase 3
 rules.
 

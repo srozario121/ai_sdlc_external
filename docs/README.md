@@ -20,5 +20,5 @@ Every new topic directory must be linked from the **Research Index** and
 
 ## Sub-areas
 
-- [`research/`](research/) — deep research on AI SDLC approaches.
-- [`evaluation/`](evaluation/) — how to measure the efficacy of AI SDLC flows.
+- `research/` — deep research on AI SDLC approaches.
+- `evaluation/` — how to measure the efficacy of AI SDLC flows.

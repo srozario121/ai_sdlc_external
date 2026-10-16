@@ -24,20 +24,8 @@ node_modules/
 ../ai-sdlc-item-*/
 *.tmp
 *.log
-# Committed bench evidence (watchdog / server-error logs cited by the item 13 READMEs).
-!docs/evaluation/*/examples/**/*.log
-# Committed Langfuse evidence (the T7 live run cited by scripts/langfuse/README.md).
-!scripts/langfuse/measurements/*.log
-# Committed test fixtures. qwen-otel-sample.log is REAL telemetry captured from
-# a Qwen Code run — the adapter selftest cannot run without it, and `*.log`
-# above silently kept it out of the repo, so the gate passed locally and failed
-# in CI on a fresh clone.
-!scripts/langfuse/testdata/*.log
 .review_diff.txt
 
 # Build / rendered output
 _site/
 dist/
-
-# Evaluation-harness run output (transcripts, results.jsonl, rendered scorecard)
-results/

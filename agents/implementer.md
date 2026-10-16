@@ -109,7 +109,7 @@ acceptance criteria.
   reach outside the repo.
 <!-- platform:pi -->
 - **Least-privilege** — you have `bash` to build and run gates; use it for the work,
-  not to reach outside the repo. As a subagent you never start `pi` or `pi-gufo`.
+  not to reach outside the repo. As a subagent you never start an interactive coding-agent session.
 <!-- platform:end -->
 - **Worktree-first delivery** — all work in the item's git worktree; never commit
   to `main`. Deliver via Pull Request.

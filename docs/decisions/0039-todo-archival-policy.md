@@ -1,120 +1,66 @@
-# 0039 — Finished TODO items are archived by an explicit command into todo/archive/, once done, old enough and no longer depended on; one generated index lists them; one checker guards the files and an opt-in hook only checks, never moves
+# 0039 — Finished backlog items are archived by an explicit command, once done, old enough and no longer depended on; one index lists them; a checker guards the files and a hook only checks, never moves
 
-- **Status:** Accepted (2026-10-11), with four unasked defaults that stay
-  cheap to override (see Consequences).
-- **Item:** 80 · **Date:** 2026-10-11 · **Origin:** default (item 80's
-  plan-review ran as a subagent and could not ask; every rule below is the
-  evidence-resolved default, tagged unasked where the plan tags it).
+- **Status:** Accepted
 - **Amends:** [0002](0002-planning-artefact-contract.md), the contract that
-  item files live in `todo/<n>-<slug>.md` and that every id named must exist
-  there. Item files may now live in `todo/archive/` as well.
-- **Applies to:** item 80 and its tooling (T5-T9), and every script that reads
-  `todo/` (`todo_lib.sh`, `gen_todo_index.sh`, `check_todo.sh`,
-  `delivery_status.sh`, `todo_ledger.sh`). It binds item
-  [82](../../todo/82-todo-number-reservation.md)'s checker work
-  through the single-checker rule (rule 7).
-- **Builds on:** [0001](0001-hierarchical-todo-layout.md) (the thin generated
-  `TODO.md` over per-item files) and
-  [0021](0021-backlog-delivery-conventions.md) (the delivery tooling that
-  reads item files).
-- **Evidence:** [TODO archival evaluation](../research/todo-archival/todo-archival.md)
-  (the rule applied to all 166 items on 2026-10-11).
+  item files live one per item and that every id named must exist there. Item files may now live in a backlog archive as well.
+- **Builds on:** [0001](0001-hierarchical-todo-layout.md) (a thin generated
+  index over per-item files).
 
 ## Context
 
-1. **`todo/` has 166 item files.** 77 are `done`. They are read by five
-   scripts and by every plan-review run, and `TODO.md` lists all of them.
-   Finished items are still referenced (as a `depends_on`, a `parent` or a
-   `reference_class`), so they cannot simply be deleted.
-2. **Deleting is wrong, hiding is cheap.** History, ids and links must
-   survive. A move into a subdirectory keeps the file, its `git log` (through
-   `git mv`) and its id.
-3. **The rule was measured, not guessed.** Applied on 2026-10-11 with
-   `N = 14` days, it selects 16 items (288 KB, 4,985 lines) and blocks 61: 30
-   by recency alone, 6 by a live dependant alone, 25 by both. The 16 movers
-   carry 29 inbound `todo/` links (16 in the generated `TODO.md`, 13 to
-   rewrite), 31 sibling links, and 24 outbound links that change because the
-   file sits one directory deeper. Thirteen of them are some item's
-   `reference_class`.
-4. **The archive is a navigation change, not a size change.** The plans area is
-   4.6% of the repository's lines. The same evaluation found that 58% of the
-   repository's lines are vendored Rust crates, which this policy does not
-   touch.
-5. **The only existing gate is slow.** `scripts/check_todo.sh` took about 42 s
-   wall-clock on 2026-10-11, so a hook cannot call it whole.
+A backlog accumulates finished items. They are still referenced — as a
+`depends_on`, a `parent` or a historical comparison — so they cannot simply be
+deleted, but reading them on every planning run costs context. History, ids and
+links must survive any tidying. A move into a dedicated archive directory keeps
+the file, its version-control history and its id, while taking it out of the
+active set.
 
 ## Decision
 
-1. **Location.** An archived item is the same file under `todo/archive/`,
-   same name (`todo/archive/<n>-<slug>.md`). Never deleted. Moved with `git mv`
-   so history follows it. Ids stay unique across `todo/` and `todo/archive/`.
-2. **Eligibility.** An item is eligible when all hold:
-   - status is `done`;
-   - the last commit touching the file is at least `ARCHIVE_DAYS` old
-     (default 14, a Makefile variable; the age is git's committer date, so a
-     later edit restarts the clock);
+1. **Location.** An archived item is the same file, same name, under a backlog
+   archive directory. Never deleted; moved with the version-control tool so
+   history follows it. Ids stay unique across the active and archived sets.
+2. **Eligibility.** An item is archived only when all hold:
+   - its status is `done`;
+   - the last change to it is at least an age threshold old (a configurable
+     number of days, measured from the commit date, so a later edit restarts
+     the clock);
    - no non-`done` item names it in `depends_on` or `parent`;
    - every item that names it as `parent` is itself archived or eligible.
 
-   `partial` is never eligible (work is outstanding). `paused` is never
-   auto-eligible; it is listed as "needs a user call" and no override is
-   provided for it. `estimate.reference_class` does not block, since a
-   reference class is a historical comparison, not a working dependency.
-3. **Command.** `make todo-archive` is explicit, run by a person or an agent,
-   never by a hook or a timer. It lists the eligible and the blocked items
-   and does nothing else by default (a dry run). `APPLY=1` does the `git mv`,
-   rewrites relative links repo-wide in every form the evaluation found
-   (`todo/x.md`, `../todo/x.md`, `../../todo/x.md`, same-directory `x.md`
-   from sibling items, and the moved file's own outbound `../` and sibling
-   links, with any `#anchor` kept) and regenerates `TODO.md`. A reference by
-   bare id ("item 20.5", "ADR 0002") is never rewritten and stays valid.
-4. **Index shape.** One index. The generated `TODO.md` gains a collapsed
-   "Archived" section at its foot, one line per archived item, linking to
-   `todo/archive/<file>`. No second generated file, no second drift check.
-   `TODO.md` stays generated by `make todo-index` and is never hand-edited.
-5. **Every reader resolves both directories.** `todo_files` (and so the index,
-   `check-todo`, `delivery_status.sh` and `todo_ledger.sh`) read `todo/*.md`
-   and `todo/archive/*.md`. `depends_on`, `parent` and `reference_class`
-   resolve across both. A duplicate id across the two directories fails.
-   This lands before any file moves.
-6. **Hook role.** `.githooks/pre-commit` is opt-in: `make hooks-install` sets
-   `core.hooksPath = .githooks` (idempotent), `make hooks-uninstall` reverses
-   it. The hook **checks and never moves**. It runs only when staged paths
-   touch `todo/`, `TODO.md` or a link into them. It fails on a dangling todo
-   link, a duplicate id across both directories and a live item that names a
-   missing id; it warns when eligible items remain unarchived. It is a
-   path-scoped fast check, not the whole `check-todo`, and its measured run
-   time on this box is recorded in the PR that adds it. If it cannot be made
-   fast (about 5 s), it warns only and the failure stays in `make check`.
-7. **Single checker.** `scripts/check_todo.sh`, with a small fast verify mode,
-   is the one place todo-integrity rules live. The hook calls it and never
-   re-implements a rule. Item 82's cross-ref duplicate scan (`origin/main`
-   plus open PR heads) extends the same script; it needs `gh` and the
-   network, so it stays out of the hook and in 82's own gate. `make check`
-   remains the gate that decides a merge.
-8. **First run.** The first real archival run is its own commit, after the
-   tooling is green, so the tool is proven on the real tree. In-flight
-   branches that touch a moved file rely on git's rename detection; a stale
-   link in an open branch is caught by `check-links` when it rebases.
+   An item with work outstanding (`partial`) is never eligible. A deliberately
+   `paused` item is never auto-eligible — it is surfaced for a human decision.
+   A historical comparison (`reference_class`) does not block, because it is
+   not a working dependency.
+3. **Explicit command.** Archiving is run by a person or an agent, never by a
+   hook or a timer. It is a dry run by default (listing what is eligible and
+   what blocks the rest); an apply flag moves the files, rewrites every
+   relative link to and from them, and regenerates the index. A reference by
+   bare id is never rewritten and stays valid.
+4. **One index.** The generated index gains a collapsed "Archived" section,
+   one line per archived item linking to its new location. No second index, no
+   second drift check. The index stays generated and is never hand-edited.
+5. **Every reader resolves both locations.** The index, the integrity checker
+   and any downstream reader resolve `depends_on`, `parent` and
+   `reference_class` across both the active and archived sets. A duplicate id
+   across the two fails. This lands before any file moves.
+6. **Hook role.** An opt-in pre-commit hook **checks and never moves**. It runs
+   only when staged paths touch the backlog or links into it, failing on a
+   dangling link, a duplicate id across both sets, or a live item naming a
+   missing id, and warning when eligible items remain unarchived. It is a
+   path-scoped fast check, not the whole integrity checker.
+7. **Single checker.** One script is the single home of backlog-integrity
+   rules; the hook calls it and never re-implements a rule. The full quality
+   gate remains the thing that decides a merge.
 
 ## Consequences
 
-- ADR 0002's rule "everything named must exist" now means "exists in `todo/`
-  or `todo/archive/`". Its file-name pattern is unchanged. 0002's status note
-  carries an "Amended by 0039" line.
-- The first run moves 16 items and `todo/` falls from 166 files to 150. Later
-  runs take the 30 recency-blocked items as they age past 14 days.
-- `check-todo` must read both directories before the first move, or 13 of
-  the 16 moves fail on `reference_class`.
-- **Open to override, unasked** (a one-bullet edit before the PR named):
-  the age rule (14 days or "last delivery wave"; PR 2), the index shape
-  (collapsed section or `ARCHIVE.md`; PR 2), no committed `make cloc`
-  snapshots, and the hook being opt-in rather than installed by a setup
-  target (both PR 3).
-- The hook adds a second place a todo rule is enforced in time, but not a
-  second implementation of it (rule 7).
-- A person who adopts the hook sees a failing commit on a dangling link
-  instead of a failing `make check` later; a person who does not is
-  unchanged.
-- Not decided here: shrinking the vendored Rust crates, or splitting them
-  from `make cloc`'s "code" row. That is a separate decision.
+- The rule "everything named must exist" now means "exists in the active set
+  or the archive"; the file-name pattern is unchanged.
+- The checker must read both locations before the first move, or items kept
+  alive only as a `reference_class` would fail.
+- Open branches that touch a moved file rely on the version-control tool's
+  rename detection; a stale link in an open branch is caught by the link
+  checker when it rebases.
+- Deliberately out of scope here: how large the archive is allowed to grow, and
+  any further repository-size tidying — separate decisions.

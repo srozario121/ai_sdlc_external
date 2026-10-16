@@ -1,7 +1,6 @@
 # Plan-Then-Execute — Flow Summary
 
 > Full-form flow: [plan-then-execute.md](plan-then-execute.md)
-> Source research: [`docs/research/plan-then-execute/`](../../research/plan-then-execute/plan-then-execute.md)
 
 ## TL;DR
 

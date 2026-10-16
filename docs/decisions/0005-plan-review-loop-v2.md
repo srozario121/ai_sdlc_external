@@ -1,7 +1,7 @@
 # 0005 — plan-review loop v2: scan-first, tagged, estimated, relay-capable
 
 - **Status:** Accepted
-- **Item:** 14 · **Date:** 2026-09-14 · **Origin:** user (scan-first intake, no
+- **Origin:** user (scan-first intake, no
   question cap, main-session fan-out, cross-item refinement, no within-item
   parallelism); default (read-back scope, self-check, pre-mortem, clarifications
   record)
@@ -11,9 +11,9 @@
 The v1 loop asked fixed intake questions **before reading anything**, refined
 strictly one item at a time, never read its own findings log back, recorded no
 estimate, and left unrecorded which decisions the user made and which the agent
-assumed. Refinement often ran without the question tool at all (items 4, 9, 12,
-13), resolving ambiguities by precedent the user never saw. The memo's platform
-check (§3, verified 2026-09-14 by documentation and a live probe) found that
+assumed. Refinement often ran without the question tool at all, resolving
+ambiguities by precedent the user never saw. A platform
+check (verified against the tool documentation and a live probe) found that
 **subagents cannot ask the user** on either Claude Code or VS Code Copilot, while
 the main session can resume a subagent with a message. Its area-A review found no
 evidence that parallel drafting, judges or critics reduce *human* rounds — only
@@ -64,4 +64,4 @@ batching questions can.
 - The Copilot cloud agent cannot ask mid-run, so it can only deliver items already
   refined; relay mode needs a main session that can resume subagents.
 - Whether v2 actually plans better is measured, not assumed:
-  [plan-review loop evaluation](../evaluation/plan-review-loop/plan-review-loop.md).
+  plan-review loop evaluation.

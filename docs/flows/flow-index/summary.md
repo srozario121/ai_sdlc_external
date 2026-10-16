@@ -4,11 +4,11 @@
 
 ## TL;DR
 
-All **eight** researched AI-SDLC approaches now have a runnable asset: **six** ship
-as flow playbooks under `docs/flows/`, and **two** (role-specific multi-agent flows,
-human-in-the-loop review gates) were already realised by the agent chain in TODO
-item 4. Exactly **two new agents** — `spec-author` and `orchestrator` — bring the
-roster to eight; every other flow recomposes existing agents.
+Every canonical AI-SDLC approach has a runnable asset: **six** ship as flow
+playbooks under `docs/flows/`, and **two** (role-specific multi-agent flows,
+human-in-the-loop review gates) are realised directly by the agent chain. The
+flow-specific additions are `spec-author` and `orchestrator`; every other flow
+recomposes existing agents.
 
 ## Which flow fits which situation
 

@@ -1,18 +1,17 @@
 # 0002 — Planning artefact contract: YAML front-matter as the machine-readable plan
 
 - **Status:** Accepted; amended by [0039](0039-todo-archival-policy.md) (item files may also
-  live in `todo/archive/`)
-- **Item:** 14 · **Date:** 2026-09-14 · **Origin:** user (front-matter as source
-  of truth; `spec-author` stays separate); default (schema, task split, legacy
-  contract)
+  live in a backlog archive)
+- **Origin:** user (front-matter as source of truth; `spec-author` stays
+  separate); default (schema, task split, legacy contract)
 
 ## Context
 
 Refined items were prose only. `solution-architect`, `spec-author` and
 `orchestrator` each re-derived tasks, dependencies and parallelism from that prose;
 nothing marked which tasks could run concurrently, and estimates did not exist.
-The [decision memo](../research/planning-architectures/planning-architectures.md)
-(§4 D) reviewed Spec Kit (`tasks.md` with `[P]` = "different files, no
+A review of prior tools
+— Spec Kit (`tasks.md` with `[P]` = "different files, no
 dependencies on incomplete tasks"), Task Master (`tasks.json`: `dependencies`,
 effort, complexity analysis) and MetaGPT's structured SOP hand-offs, and found
 that a task marker set by hand duplicates what the dependency graph already says
@@ -20,7 +19,7 @@ unless the two are checked against each other.
 
 ## Decision
 
-The **front-matter of `todo/<n>-<slug>.md` is the machine-readable plan.** The body
+The **front-matter of `items/<id>-<slug>.md` is the machine-readable plan.** The body
 stays human prose. `spec-author` remains an optional downstream stage that reads
 the same file; it is not merged into `plan-review`.
 
@@ -36,10 +35,10 @@ parse it. Comments (`# …`) and blank lines are allowed.
 | `id` | all | `N` or `N.K` (sub-item); matches the file name |
 | `title` | all | one line |
 | `status` | all | `open` · `refined` · `in-progress` · `partial` · `paused` · `done` |
-| `contract` | all | `legacy` (items 1–14 as migrated) · `v2` |
+| `contract` | all | `legacy` (pre-existing items as migrated) · `v2` |
 | `depends_on` | all | flow list of item ids, `[]` if none |
 | `parent` | sub-items | parent item id |
-| `resources` | optional, all | flow list over `gpu` · `serve-outage` · `serve-slot` · `serve-pin` · `langfuse`: the shared resources the item's delivery holds ([0021](0021-backlog-delivery-conventions.md)) |
+| `resources` | optional, all | flow list of the shared resources an item's delivery holds (for example a `gpu`, a build slot, a pinned config, a tracing service) |
 | `refined` | v2 | `YYYY-MM-DD` |
 | `complexity` | v2 | integer 1–10, **derived** from `subscores` |
 | `size` | v2 | `S` (1–2) · `M` (3–4) · `L` (5–7) · `XL` (8–10), derived from `complexity` |
@@ -49,13 +48,14 @@ parse it. Comments (`# …`) and blank lines are allowed.
 | `decisions` | v2 | flow list of ADR numbers, `[]` if none |
 | `tasks` | v2 | list of tasks, each with `id` (`T<k>`), `phase`, `depends_on` (task ids), `parallel` (`true`/`false`), `acceptance` (one line) |
 
-`resources` is how `make delivery-plan` keeps two items that need the box, an
-outage, the serving slot, the pin or the Langfuse lifecycle out of one delivery
-wave. `check-todo` rejects a name outside the vocabulary but never requires the
-key; the planner infers resources from the item's text and warns when the two
-disagree ([ADR 0021](0021-backlog-delivery-conventions.md)).
+`resources` is how a batch planner keeps two items that contend for the same
+shared resource — a GPU, an outage window, a serving slot, a pinned config, a
+tracing service — out of one delivery wave. The backlog checker validates the
+shape but never requires the key; the planner may infer resources from the
+item's text and warn when the two disagree.
 
-Legacy items may carry any optional key (item 14 carries its own estimate) but only
+Legacy items may carry any optional key (a legacy item may keep its own
+estimate) but only
 `id`, `title`, `status`, `contract` and `depends_on` are required.
 
 ### Rules
@@ -66,7 +66,7 @@ Legacy items may carry any optional key (item 14 carries its own estimate) but o
 - **`parallel` must agree with `depends_on`.** A task marked `parallel: true` may
   not depend on a task in its own phase. File overlap is not in the schema; the
   `orchestrator` still checks it before fanning tasks out.
-- **Derived values are re-derived.** `check-todo` recomputes `complexity` from
+- **Derived values are re-derived.** the backlog checker recomputes `complexity` from
   `subscores` and `size` from `complexity`, and fails on any mismatch.
 - **Everything named must exist.** `depends_on`, `parent` and
   `estimate.reference_class` must name existing items; task `depends_on` must
@@ -123,4 +123,4 @@ tasks:
   delivery.
 - The YAML subset is intentionally narrow; nested flow maps (`{a: 1}`) and
   multi-line scalars are not supported and fail the parser loudly.
-- Items 1–14 keep `contract: legacy`; no task graphs are retro-fitted.
+- Pre-existing items keep `contract: legacy`; no task graphs are retro-fitted.
