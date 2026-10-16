@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# pre-commit — TODO integrity before a commit (item 80, ADR 0039). Opt-in:
+# `make hooks-install` sets core.hooksPath to .githooks; `make hooks-uninstall`
+# reverses it; `git commit --no-verify` skips it once.
+#
+# The hook CHECKS and NEVER MOVES a file. It runs only when the staged paths touch
+# todo/ or TODO.md, or a staged Markdown change adds a line naming todo/. Then it
+# calls the one shared checker, scripts/check_todo.sh --fast (no rule is
+# re-implemented here), which fails on:
+#   * a Markdown link into todo/ that does not resolve (dangling todo link)
+#   * a duplicate item id, across todo/ and todo/archive/
+#   * a depends_on / parent / reference_class naming an id that does not exist
+# and it WARNS (never fails) when items are eligible for `make todo-archive`.
+# It reads the working tree, so stage whole files. The full check-todo (schema,
+# index drift) stays the real gate in `make check`; this is the fast subset,
+# about a second on this box (TODO_HOOK_TIMEOUT, default 10 s, turns a stall into
+# a warning instead of a blocked commit).
+set -uo pipefail
+
+top="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+cd "$top" || exit 0
+[ -f scripts/check_todo.sh ] || exit 0
+
+staged="$(git diff --cached --name-only --diff-filter=ACDMR)"
+[ -n "$staged" ] || exit 0
+relevant=0
+grep -qE '^(todo/|TODO\.md$)' <<< "$staged" && relevant=1
+if [ "$relevant" = 0 ] && grep -q '\.md$' <<< "$staged"; then
+  git diff --cached -U0 -- '*.md' | grep -q '^+.*todo/' && relevant=1
+fi
+[ "$relevant" = 1 ] || exit 0
+
+limit="${TODO_HOOK_TIMEOUT:-10}"
+out="$(timeout "$limit" bash scripts/check_todo.sh --fast 2>&1)"; rc=$?
+if [ "$rc" -eq 124 ]; then
+  echo "pre-commit: the todo check took over ${limit}s; skipped (warn only). 'make check-todo' is the gate." >&2
+  exit 0
+fi
+if [ "$rc" -ne 0 ]; then
+  grep -E '^FAIL' <<< "$out" | head -20 >&2
+  echo "pre-commit: todo integrity check failed (scripts/check_todo.sh --fast). Fix it, or 'git commit --no-verify' to skip." >&2
+  exit 1
+fi
+
+n="$(timeout "$limit" bash scripts/todo_archive.sh --paths 2>/dev/null | wc -l | tr -d ' ')"
+if [ "${n:-0}" -gt 0 ]; then
+  echo "pre-commit: warning: $n done item(s) are eligible for archival (make todo-archive lists them; APPLY=1 moves them)." >&2
+fi
+exit 0

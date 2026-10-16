@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: CI only needs to read the repository contents.
+permissions:
+  contents: read
+
+# Cancel superseded runs on the same ref (e.g. rapid pushes to a PR branch).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Quality gates (structure + links + lint-md + check-toc)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run quality gates
+        run: make check
