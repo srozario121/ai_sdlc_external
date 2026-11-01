@@ -43,7 +43,9 @@ Cross-item decisions are recorded as [ADRs](docs/decisions/README.md).
 │   └── decisions/     # architecture decision records (ADRs)
 ├── AGENTS.md          # instructions for coding agents working here
 ├── CONTRIBUTING.md    # how to add/change agents, flows and docs
-├── Makefile           # self-contained gates: make help, make check
+├── CLAUDE.md          # symlink to AGENTS.md
+├── Makefile           # self-contained gates: make help, check, fmt, agents-sync
+├── scripts/           # agents-sync.sh — renders the agent copies
 └── README.md
 ```
 
@@ -106,7 +108,9 @@ policy for finished items. The
 3. Adopt the planning contract: one file per backlog item with the front-matter
    schema in [ADR 0002](docs/decisions/0002-planning-artefact-contract.md),
    refined through the [plan-review loop](docs/decisions/0005-plan-review-loop-v2.md).
-4. Keep the kit self-consistent with `make check` (see `make help`).
+4. Keep the kit self-consistent with `make check` (see `make help`); `make fmt`
+   fixes what the Markdown lint flags and `make agents-sync` regenerates the
+   agent copies.
 
 ## License
 

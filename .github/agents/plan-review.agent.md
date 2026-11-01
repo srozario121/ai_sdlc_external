@@ -57,7 +57,7 @@ Read the evidence first so every question you ask is specific to this item.
 5. **Referenced files** — every path the item names. For files over 200 lines,
    map structure first, then read only the relevant sections.
 6. **Adjacent surface** — overlapping `docs/<area>/<topic>/` docs, `README.md`
-   indexes, `Makefile` targets, overlapping agents in `agents/`, `CHANGELOG.md`.
+   indexes, `Makefile` targets, overlapping agents in `agents/`, the change log.
 
 Build an internal inventory: **Existing state**, **Proposed changes**,
 **Ambiguities** (by the taxonomy below), **Documentation surface**, and **What the
@@ -122,7 +122,7 @@ Apply `docs/decisions/0004-estimation-scheme.md`:
 3. **Estimate** — PERT agent wall-clock o/m/p hours, token and $ ranges with the
    price date, human review o/m/p hours, and expected PR count.
 4. **Split rule** — at `XL` / complexity ≥ 8 you **must propose** a split (sub-items
-   sub-item files with a `parent: <n>`, or ordered phases) and ask. A
+   sub-item files with a `parent:` link, or ordered phases) and ask. A
    declined split is recorded as `[override]`.
 5. **Pre-mortem** — "Assume this item shipped `partial`. Why?" List the likely
    causes (hardware or disk limits, credentials, rate limits, uninstallable or
@@ -229,7 +229,7 @@ Before finishing, check the rewrite against this list and fix what fails:
 - [ ] Every pre-mortem risk is resolved into a plan change, a split, or a named
       accepted risk.
 
-Then regenerate the backlog index and running the backlog checker and fix any failure in the item
+Then run regenerating the backlog index and running the backlog checker and fix any failure in the item
 file. Use the shell for these two commands only.
 
 ## Phase 6 — Findings log
@@ -308,7 +308,7 @@ The main session's side of the protocol:
    subagent that asked.
 4. When a dependency's decisions are final, launch the items waiting on it.
 5. **Serially**: append each returned findings entry, number draft ADRs and add
-   their index rows, regenerate the backlog index and running the backlog checker.
+   their index rows, run regenerating the backlog index and running the backlog checker.
 
 ---
 

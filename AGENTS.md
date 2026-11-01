@@ -15,10 +15,9 @@ agent copies are internally consistent.
 
 - The canonical agent sources live under `agents/`; `.claude/agents/` and
   `.github/agents/` hold the per-platform copies. Edit the canonical source and
-  keep the copies in step — a copy that drifts is a bug. See
+  regenerate the copies with `make agents-sync` — never hand-edit a copy. See
   [ADR 0003](docs/decisions/0003-agent-single-sourcing.md).
-- `make check-agents` fails when an `agents/<name>.md` has no matching
-  `.claude/agents/<name>.md` and `.github/agents/<name>.agent.md`.
+- `make check-agents` fails on a missing, orphaned or drifted copy.
 
 ## Documentation discipline
 
