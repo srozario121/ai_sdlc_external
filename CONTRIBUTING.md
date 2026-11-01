@@ -69,8 +69,10 @@ Item ids never change; a finished item may be archived rather than deleted (see
 
 Before requesting a review, verify:
 
-- [ ] **`make check` exits 0** — no dead relative links, and every `agents/*.md`
-      has its `.claude/agents/` and `.github/agents/` copies
+- [ ] **`make check` exits 0** — no dead relative links, no trailing whitespace
+      or missing final newline in Markdown (`make fmt` fixes it), and every
+      `agents/*.md` has byte-identical generated `.claude/agents/` and
+      `.github/agents/` copies
 - [ ] **Flow / decision convention followed** — a new flow has both a full-form
       `<flow>.md` and a `summary.md` under `docs/flows/<flow>/`
 - [ ] **Agent copies in step** — the canonical `agents/<name>.md` and its
@@ -88,13 +90,17 @@ Before requesting a review, verify:
 1. Author the canonical source under `agents/<name>.md`. Front-matter carries
    `name`, `description`, and the tool list; the body follows the phase/role
    structure of the existing agents.
-2. Add the matching per-platform copies: `.claude/agents/<name>.md` and
-   `.github/agents/<name>.agent.md`. Keep them in step with the canonical source
-   — a drift is a bug. See [ADR 0003](docs/decisions/0003-agent-single-sourcing.md).
+2. Run `make agents-sync` to generate the per-platform copies,
+   `.claude/agents/<name>.md` and `.github/agents/<name>.agent.md`. Never edit a
+   copy by hand: `check-agents` fails on a copy that differs from what
+   `agents-sync` renders. Lines that differ per platform go in
+   `<!-- platform:claude -->` / `<!-- platform:copilot -->` blocks closed by
+   `<!-- platform:end -->`, and `{{ask_tool}}` renders the ask tool's name. See
+   [ADR 0003](docs/decisions/0003-agent-single-sourcing.md).
 3. Add a row to the **agent roster** in [README.md](README.md) and reference the
    agent from the relevant flow playbook.
 4. Cross-link the agent's flow from the [flow index](docs/flows/flow-index/flow-index.md).
-5. Run `make check` — `check-agents` and `check-links` must both pass.
+5. Run `make check` — every gate (`check-agents`, `check-links`, `lint-md`) must pass.
 
 ---
 

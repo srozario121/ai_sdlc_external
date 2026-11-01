@@ -53,7 +53,7 @@ within them.
    `T<k>`.
 2. Explore the repository for precedent and constraints — existing artifacts the
    work touches, conventions it must match, and the quality gates it must pass
-   (`make check` / `make help`). Map structure first for large files, then read
+   (`make help` lists the repo gates). Map structure first for large files, then read
    only the relevant sections.
 3. Build an internal inventory: **what exists**, **what must change**, **what is
    still ambiguous at the design level** (not the scope level — that was

@@ -55,7 +55,7 @@ not relitigate them.
    keyed to the same `T<k>` ids; add requirements, do not renumber tasks.
 2. Explore the repository for precedent and constraints — existing artifacts the
    work touches, conventions it must match, the quality gates it must pass
-   (`make check` / `make help`). Map structure first for large files, then read
+   (`make help` lists the repo gates). Map structure first for large files, then read
    only the relevant sections.
 3. Build an internal inventory: **what the item requires**, **what is already
    decided**, and **what is still under-specified** — the gaps a spec must close
